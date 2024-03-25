@@ -8,27 +8,28 @@ pygame.init()
 font = pygame.font.Font(None, 24)
 
 
-# Получение метода инициализации мира
 def get_input_method():
-    method = input(
-        "Желаете ввести живые клетки вручную (введите 'в') или сгенерировать случайно (введите 'с')? ").lower()
-    return method
+    while True:
+        method = input(
+            "Желаете ввести живые клетки вручную (введите 'в') или сгенерировать случайно (введите 'с')? ").lower()
+        if method in ['в', 'с']:
+            return method
+        else:
+            print("Некорректный ввод. Пожалуйста, введите 'в' для ручного ввода или 'с' для случайной генерации.")
 
 
-# Получение положительного целого числа
-def get_positive_integer(prompt):
+def get_positive_integer(prompt, min_value=1, max_value=100):
     while True:
         try:
             value = int(input(prompt))
-            if value > 0:
+            if min_value <= value <= max_value:
                 return value
             else:
-                print("Введите целое, положительное число.")
+                print(f"Введите целое число между {min_value} и {max_value}.")
         except ValueError:
             print("Введите целое, положительное число.")
 
 
-# Инициализация мира
 def initialize_world(length, method='с'):
     if method == 'в':
         return user_define_world(length)
@@ -36,19 +37,24 @@ def initialize_world(length, method='с'):
         return [random.choice([0, 1]) for _ in range(length)]
 
 
-# Ввод пользователем живых клеток
 def user_define_world(length):
     world = [0] * length
-    initial_cells = input(f"Введите позиции живых клеток, разделенные пробелом (индексация с 1, макс. {length}): ")
-    for i in map(int, initial_cells.split()):
-        if 1 <= i <= length:
-            world[i - 1] = 1
-        else:
-            print(f"Индекс {i} вне допустимого диапазона. Пропускаем.")
+    while True:
+        initial_cells = input(f"Введите позиции живых клеток, разделенные пробелом (индексация с 1, макс. {length}): ")
+        indices = initial_cells.split()
+        valid_input = True
+        for i in indices:
+            if not i.isdigit() or not 1 <= int(i) <= length:
+                valid_input = False
+                print(f"Индекс {i} вне допустимого диапазона.")
+                break
+        if valid_input:
+            for i in map(int, indices):
+                world[i - 1] = 1
+            break
     return world
 
 
-# Генерация следующего поколения
 def next_generation(current_gen):
     length = len(current_gen)
     new_gen = [0] * length
@@ -59,14 +65,12 @@ def next_generation(current_gen):
     return new_gen
 
 
-# Отрисовка мира
 def draw_world(world, screen, cell_size):
     for i, cell in enumerate(world):
         color = (69, 123, 157) if cell == 1 else (241, 250, 238)
         pygame.draw.rect(screen, color, (i * cell_size, 150, cell_size, cell_size))
 
 
-# Отрисовка интерфейса пользователя
 def draw_ui(screen, generations, population, running, speed, screen_width):
     if not running:
         pygame.draw.rect(screen, (230, 57, 70), pygame.Rect(screen_width // 2 - 40, 10, 80, 30))
@@ -79,7 +83,6 @@ def draw_ui(screen, generations, population, running, speed, screen_width):
     screen.blit(population_text, (10, 70))
 
 
-# Отрисовка ползунка скорости
 def draw_speed_slider(screen, speed, screen_width):
     slider_rect = pygame.Rect(10, 120, screen_width - 20, 10)
     handle_position = 10 + int(speed * (screen_width - 50) / 100)
@@ -89,7 +92,7 @@ def draw_speed_slider(screen, speed, screen_width):
 
 
 def main():
-    length = get_positive_integer("Введите длину мира: ")
+    length = get_positive_integer("Введите длину мира (от 1 до 100): ", 1, 100)
     cell_size = 20
     screen_width = length * cell_size
     screen_height = 200 + cell_size
