@@ -51,4 +51,5 @@ The program includes comprehensive input validation to ensure a smooth user expe
 
 This project is licensed under the MIT License - see the LICENSE file for details
 
+
 Enjoy exploring the fascinating dynamics of the One-Dimensional Game of Life!
