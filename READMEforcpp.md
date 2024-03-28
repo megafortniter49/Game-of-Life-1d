@@ -47,4 +47,8 @@ The program includes comprehensive input validation to ensure a smooth user expe
 - Checks for logical input (`y` or `n`) for binary choices.
 - Allows re-entry of inputs upon validation failure.
 
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details
+
 Enjoy exploring the fascinating dynamics of the One-Dimensional Game of Life!
