@@ -39,5 +39,3 @@ Feel free to fork the project and submit pull requests with any enhancements or 
 
 ## License
 This project is open-source and available under the MIT License.
-
-This README provides basic information about the project, instructions for installing, launching, managing and exiting the game, as well as information about contributions to the project and licenses. It is designed in the Markdown style for easy integration with GitHub or other platforms that support this formatting.
